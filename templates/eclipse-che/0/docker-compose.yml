@@ -91,7 +91,7 @@ services:
     volumes_from:
     - docker-dind
     command:
-    - "--remote:che.jtcressy.net"
+    - --remote:che.jtcressy.net
     links:
     - docker-dind:docker-dind
     ports:
