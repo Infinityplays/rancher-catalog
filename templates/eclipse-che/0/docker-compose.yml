@@ -15,7 +15,6 @@ services:
     image: library/docker:dind
     hostname: docker-dind
     stdin_open: true
-    network_mode: host
     volumes:
     - che-lib-vol:/home/user/che/lib
     - che-storage-vol:/home/user/che/storage
