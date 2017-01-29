@@ -1,0 +1,12 @@
+version: '2'
+catalog:
+  name: Codenvy Eclipse Che Server
+  version: 0.1.0
+  description: Automatically create and manage development workspaces based on docker:dind
+services:
+  docker-dind:
+    scale: 1
+    start_on_create: true
+  che-server:
+    scale: 1
+    start_on_create: true

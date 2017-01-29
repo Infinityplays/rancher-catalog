@@ -1,0 +1,5 @@
+name: Codenvy Eclipse Che Server
+description: |
+  A Cloud IDE that uses docker via docker:dind in a linked container to provide development workspaces
+version: 0.1.0
+category: Services
