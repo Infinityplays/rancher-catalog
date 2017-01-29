@@ -3,6 +3,9 @@ volumes:
   che-lib-vol:
     external: true
     driver: rancher-nfs
+  che-conf-vol:
+    external: true
+    driver: rancher-nfs
   che-storage-vol:
     external: true
     driver: rancher-nfs
@@ -10,7 +13,9 @@ services:
   docker-dind:
     privileged: true
     image: library/docker:dind
+    hostname: docker-dind
     stdin_open: true
+    network_mode: host
     volumes:
     - che-lib-vol:/home/user/che/lib
     - che-storage-vol:/home/user/che/storage
@@ -66,10 +71,15 @@ services:
     - 32816:32816/tcp
     - 32817:32817/tcp
     tty: true
+    volumes_from:
+    - che-server
     labels:
       io.rancher.container.pull_image: always
+      io.rancher.container.dns: 'true'
   che-server:
+    privileged: true
     image: codenvy/che-server:5.0.0-M6
+    hostname: che-server
     environment:
       DOCKER_HOST: tcp://docker-dind:2375
       CHE_WORKSPACE_STORAGE: /home/user/che/storage/workspaces
@@ -77,10 +87,16 @@ services:
     volumes:
     - che-lib-vol:/home/user/che/lib-copy
     - che-storage-vol:/home/user/che/storage
+    - che-conf-vol:/home/user/che/conf
     tty: true
+    volumes_from:
+    - docker-dind
+    command:
+    - --remote:che.jtcressy.net
     links:
     - docker-dind:docker-dind
     ports:
     - 8080:8080/tcp
     labels:
       io.rancher.container.pull_image: always
+      io.rancher.sidekicks: docker-dind
